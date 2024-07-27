@@ -7,8 +7,8 @@ class Solution {
   public:
     int func(int i, int j,vector<vector<int>>&triangle, vector<vector<int>>&dp){
         int n = triangle.size();
-        if(i>=n) return 0;
-        if(j>i) return 0;
+        // if(i>=n) return 0;  // redudant base cases..the ans cant go out of bouunds
+        // if(j>i) return 0;
         if(i==n-1) return triangle[i][j];
 
         if(dp[i][j]!=-1) return dp[i][j];
