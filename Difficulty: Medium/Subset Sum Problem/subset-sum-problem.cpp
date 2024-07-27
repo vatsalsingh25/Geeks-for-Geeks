@@ -11,16 +11,14 @@ class Solution{
 public:
     bool func(vector<vector<int>>& dp, vector<int>& arr, int ind, int sum){
         if(sum==0) return true;
-        if(ind==0) return arr[0]==sum;
+        if(ind==0) return (arr[0]==sum);
+        if(sum<0) return false;
         
         if(dp[ind][sum]!=-1) return dp[ind][sum]; // 1
         
         bool notTake = func(dp, arr, ind-1, sum);
-        bool take = false;
-        if(sum>=arr[ind]){
-            take=func(dp, arr,ind-1,sum-arr[ind]);
-        }
-        
+        bool take=func(dp, arr,ind-1,sum-arr[ind]);
+
         return dp[ind][sum] = (notTake || take); //2
     }
     bool isSubsetSum(vector<int>arr, int sum){
