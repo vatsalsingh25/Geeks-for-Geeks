@@ -6,21 +6,21 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    int func(vector<int>& dp, vector<int>& height, int ind){
+    int func(vector<int>& height, int ind, vector<int>& dp){
         if(ind==0) return 0;
         if(ind==1) return abs(height[0]-height[1]);
         
-        if(dp[ind]!= -1) return dp[ind];
+        if(dp[ind]!=-1) return dp[ind];
         
-        int left = func(dp,height,ind-1) + abs(height[ind]-height[ind-1]);
-        int right = func(dp,height,ind-2) + abs(height[ind]-height[ind-2]);
+        int oneStep = func(height,ind-1,dp)+abs(height[ind]-height[ind-1]);
+        int twoStep = func(height,ind-2,dp)+abs(height[ind]-height[ind-2]);
         
-        return dp[ind]=min(left,right);
+        return dp[ind]=min(oneStep,twoStep);
     }
     int minimumEnergy(vector<int>& height, int n) {
         // Code here
         vector<int>dp(n,-1);
-        return func(dp,height,n-1);
+        return func(height,n-1,dp);
     }
 };
 
