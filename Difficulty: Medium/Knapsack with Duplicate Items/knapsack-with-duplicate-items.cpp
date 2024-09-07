@@ -9,26 +9,28 @@ using namespace std;
 
 class Solution{
 public:
-    int func(int ind, int W, int val[], int wt[], vector<vector<int>>&dp){
+
+    int func(int val[], int wt[], int W, int ind, vector<vector<int>>&dp){
         if(ind==0){
-            return val[0]*(W/wt[0]); //val * no.of times it can be picked
-            // if(W>=wt[ind]) return val[ind];          //not thid because an item can be taken many times not ony once
-            // else return 0;                     
-        }
+            return val[0]*(W/wt[0]);
+            // if(W>wt[0]) return val[0];
+            // return 0;
+        }    
         
         if(dp[ind][W]!=-1) return dp[ind][W];
         
-        int notPick = 0 + func(ind-1,W,val,wt,dp);
+        int notPick = 0+func(val,wt,W,ind-1,dp);
         int pick = INT_MIN;
-        if(W>=wt[ind]) pick =val[ind] + func(ind,W-wt[ind],val,wt,dp);
+        if(W-wt[ind]>=0) pick = val[ind]+func(val,wt,W-wt[ind],ind,dp);
         
-        return dp[ind][W]=max(pick,notPick);
+        return dp[ind][W] = max(pick,notPick);
     }
+    
     int knapSack(int N, int W, int val[], int wt[])
     {
         // code here
         vector<vector<int>>dp(N,vector<int>(W+1,-1));
-        return func(N-1,W,val,wt,dp);
+        return func(val,wt,W,N-1,dp);
     }
 };
 
