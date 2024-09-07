@@ -5,46 +5,37 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-	int func(vector<int>&arr, int ind, int sum, vector<vector<int>>&dp){
-	    //if(sum==0) return 1;
+  
+    int func(vector<int>&arr, int s1, int ind, vector<vector<int>>&dp){
 	    if(ind==0){
-	        if(sum==0 && arr[0]==0) return 2;
-	        if(sum==0 || arr[0]==sum) return 1;
+	        if(s1==0 && arr[0]==0) return 2;
+	        if(s1==0 || arr[0]==s1) return 1;
 	        return 0;
 	    }
-	    if(sum<0) return 0;
-	    if(ind==0) return arr[0]==sum;
-	    
-	    if(dp[ind][sum]!=-1) return dp[ind][sum];
-	    
-	    int notPick = func(arr,ind-1,sum,dp);
-	    int pick = func(arr,ind-1,sum-arr[ind],dp);
-	    
-	    return dp[ind][sum]=(pick+notPick)%1000000007;
-	}
+        
+        if(dp[ind][s1]!=-1) return dp[ind][s1];
+        
+        int notPick = func(arr,s1,ind-1,dp);
+        int pick = 0;
+        if(s1-arr[ind]>=0) pick = func(arr,s1-arr[ind],ind-1,dp);
+        
+        return dp[ind][s1]=(pick+notPick)%1000000007;
+    }
     int countPartitions(int n, int d, vector<int>& arr) {
         // Code here
-        //sort(arr.begin(),arr.end(),greater<int>());
-        int total=0;
+        int total = 0;
         for(int i=0; i<n; i++){
             total+=arr[i];
         }
-        if(total-d<0) return 0;
-        if((total-d)%2==1) return 0;
+        int s1 = (total + d)/2;
         
-        int sum = (total-d)/2;
+        if(d>total) return 0;
+        if((total+d)%2==1) return 0;
         
-        vector<vector<int>>dp(n,vector<int>(sum+1,-1));
-        return func(arr,n-1,sum,dp);
+        vector<vector<int>>dp(n,vector<int>(s1+1,-1));
+        return func(arr,s1,n-1,dp);
+    
     }
-    
-    //maths
-    //        s1-s2=d
-    //        s1=total-s2
-    //        total-s2-s2=d
-    //        s2=(total-d)/2
-    //        we need to find if there exist a subset with sum=s2
-    
 };
 
 //{ Driver Code Starts.
