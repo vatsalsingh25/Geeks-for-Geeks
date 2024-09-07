@@ -6,25 +6,24 @@ using namespace std;
 class Solution{
 
 	public:
-	int func(int arr[], int ind, int sum, vector<vector<int>>&dp){
+	int func(int arr[], int sum, int ind, vector<vector<int>>&dp){
 	    if(sum==0) return 1;
-	    if(sum<0) return 0;
-	    if(ind==0) return arr[0]==sum;
+	    if(ind==0) return arr[ind]==sum;
 	    
-	    if(dp[ind][sum]!=-1) return dp[ind][sum];
+	    if(dp[ind][sum]!=-1) return dp[ind][sum]; 
 	    
-	    int notPick = func(arr,ind-1,sum,dp);
-	    int pick = func(arr,ind-1,sum-arr[ind],dp);
+	    int notPick = func(arr,sum,ind-1,dp);
+	    int pick = 0;
+	    if(sum-arr[ind]>=0) pick = func(arr,sum-arr[ind],ind-1,dp);
 	    
 	    return dp[ind][sum]=(pick+notPick)%1000000007;
 	}
-	
 	int perfectSum(int arr[], int n, int sum)
 	{
         // Your code goes here
         sort(arr,arr+n,greater<int>());
         vector<vector<int>>dp(n,vector<int>(sum+1,-1));
-        return func(arr,n-1,sum,dp);
+        return func(arr,sum,n-1,dp);
 	}
 	  
 };
