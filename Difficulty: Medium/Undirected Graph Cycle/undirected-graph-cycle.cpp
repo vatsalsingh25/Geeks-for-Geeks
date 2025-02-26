@@ -7,28 +7,15 @@ using namespace std;
 
 class Solution {
   private:
-    bool bfs(int start, vector<vector<int>>& adj, vector<int>&vis){
-        queue<pair<int,int>>q;
-        
-        q.push({start,-1});
+    bool dfs(int start, int prev, vector<vector<int>>& adj,vector<int>&vis ){
         vis[start]=1;
         
-        while(!q.empty()){
-            int node = q.front().first;
-            int prev = q.front().second; 
-            q.pop();
-            
-            for(auto it: adj[node]){
-                if(!vis[it]){
-                    vis[it]=1;
-                    q.push({it,node});
-                }
-                else if(prev!=it){
-                    return true;
-                }
+        for(auto it: adj[start]){
+            if(!vis[it]){
+                if(dfs(it,start,adj,vis)) return true;
             }
+            else if(it!=prev) return true;
         }
-        
         return false;
     }
   public:
@@ -40,7 +27,7 @@ class Solution {
         
         for(int i=0; i<n; i++){
             if(!vis[i]){
-                if(bfs(i,adj,vis)) return true;
+                if(dfs(i,-1,adj,vis)) return true;
             }
         }
         return false;
