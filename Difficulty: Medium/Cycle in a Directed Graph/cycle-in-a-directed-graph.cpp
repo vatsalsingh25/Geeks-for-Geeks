@@ -7,40 +7,40 @@ using namespace std;
 
 class Solution {
   public:
-    bool dfs(int node, vector<int>&vis, vector<int>&pathVis, vector<vector<int>> &adj){
-        
-        vis[node] = 1;
-        pathVis[node] = 1;
-        
-        for(auto it: adj[node]){
-            // when node is not visited
-            if(vis[it]==0){
-                //dfs(i,vis,path,adj)
-                if( dfs(it,vis,pathVis,adj) == true ) return true;
-            }   
-            //if the node if visited
-            else{
-                if(pathVis[it] == 1) return true;
-            }
-        }
-        
-        // if no furthur node are possible and cycle is not detected
-        pathVis[node] = 0;
-        return false;
-    }
+    //using BFS
     // Function to detect cycle in a directed graph.
     bool isCyclic(vector<vector<int>> &adj) {
         // code here
         int n = adj.size();
-        vector<int>vis(n,0);
-        vector<int>pathVis(n,0);
+        vector<int>indegree(n,0);
+        queue<int>q;
+        vector<int>topo;
+        
         for(int i=0; i<n; i++){
-            if(vis[i]==0){
-                //dfs(i,vis,path,adj);
-                if(dfs(i,vis,pathVis,adj) == true) return true;
+            int m = adj[i].size();
+            for(int j=0; j<m; j++){
+                indegree[adj[i][j]]++;
             }
         }
-        return false;
+        
+        for(int i=0; i<n; i++){
+            if(indegree[i]==0) q.push(i);
+        }
+        
+        while(!q.empty()){
+            
+            int node = q.front();
+            q.pop();
+            topo.push_back(node);
+            
+            for(auto it: adj[node]){
+                indegree[it]--;
+                if(indegree[it]==0) q.push(it);
+            }
+        }
+        
+        if(topo.size()==n) return false;
+        return true;
     }
 };
 
